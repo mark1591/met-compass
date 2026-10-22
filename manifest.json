@@ -1,0 +1,28 @@
+{
+ "name": "Met Compass",
+ "short_name": "Met Compass",
+ "description": "Unofficial study guide to the layout and 100 key works of the Met Fifth Avenue.",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "background_color": "#eef0ec",
+ "theme_color": "#eef0ec",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}
