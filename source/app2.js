@@ -709,8 +709,33 @@ function fitVB(pts, minW){
   let w = Math.max(minW || 110, (x1 - x0) * 1.3 + 24, ((y1 - y0) * 1.3 + 24) * 1.5); w = Math.min(390, w);
   vb = {w, h: w / 1.5, x: (x0 + x1) / 2 - w / 2, y: (y0 + y1) / 2 - w / 3}; applyVB();
 }
-function setSheet(open){ $("#msheet").classList.toggle("open", open === true); $("#v-map").classList.toggle("full", open === "full"); }
-const sheetState = () => $("#v-map").classList.contains("full") ? "full" : $("#msheet").classList.contains("open") ? "open" : "peek";
+/* Bottom sheet with three resting points: open (details), peek (default) and full (map takes the screen).
+   It moves with a GPU transform so dragging follows the finger; the map is resized only once it settles. */
+let sheetSt = "peek", sheetPeek = 0, stageT = null;
+const FULL_STRIP = 56;
+function sheetY(st){ const s = $("#msheet"), H = s.offsetHeight; return st === "open" ? 0 : Math.max(0, H - (st === "peek" ? sheetPeek : FULL_STRIP)); }
+function placeSheet(st, animate){
+  const s = $("#msheet"); if(!s.offsetHeight) return;
+  if(!animate) s.classList.add("drag");
+  s.style.setProperty("--sy", sheetY(st) + "px");
+  $("#msbody").style.height = Math.max(0, s.offsetHeight - sheetY(st) - $("#mhandle").offsetHeight) + "px";
+  if(!animate){ void s.offsetHeight; s.classList.remove("drag"); }
+}
+function setSheet(open, instant){
+  sheetSt = open === true ? "open" : open === "full" ? "full" : "peek";
+  const v = $("#v-map"); v.classList.toggle("full", sheetSt === "full"); $("#msheet").classList.toggle("open", sheetSt === "open");
+  clearTimeout(stageT);
+  if(sheetSt === "full") stageT = setTimeout(() => v.classList.add("fullstage"), instant ? 0 : 300);
+  else v.classList.remove("fullstage");
+  $("#mhandle").setAttribute("aria-expanded", String(sheetSt === "open"));
+  placeSheet(sheetSt, !instant);
+}
+const sheetState = () => sheetSt;
+function sizeSheet(){
+  const pk = Math.round(Math.min(300, Math.max(220, innerHeight * 0.36)));
+  document.documentElement.style.setProperty("--peek", pk + "px");
+  if(pk !== sheetPeek || !$("#msheet").style.getPropertyValue("--sy")){ sheetPeek = pk; placeSheet(sheetSt, false); }
+}
 function renderChips(){
   const c = [
     plan.length ? ["route", `<svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/></svg>My route`] : null,
@@ -723,7 +748,7 @@ function renderFloors(){
 function renderMapView(){
   renderChips(); renderFloors();
   const f = planFloorNum();
-  document.documentElement.style.setProperty("--peek", Math.round(Math.min(300, Math.max(220, innerHeight * 0.36))) + "px");
+  sizeSheet();
   $("#stage").hidden = f === null; $("#offplan").hidden = f !== null;
   if(f !== null){
     const ord = orderedPlan(), r = layers.route && ord.length ? routeFor(ord, f) : null;
@@ -929,14 +954,55 @@ $("#msearch").addEventListener("keydown", e => { if(e.key === "Enter"){ e.target
 $("#msearch").addEventListener("focus", () => setSheet(true));
 $("#mclear").addEventListener("click", e => { e.preventDefault(); $("#msearch").value = ""; mquery = ""; $("#mclear").hidden = true; $("#msearch").blur(); setSheet(!!dir); renderMapView(); });
 $("#mclear").addEventListener("pointerdown", e => e.preventDefault());
-// sheet handle: tap or drag
-// sheet handle: swipe up for more, swipe down to give the map the whole screen; tap steps through
-(() => { const h = $("#mhandle"); let y0 = null, moved = false;
-  const up = { full: "peek", peek: true, open: true }, down = { open: false, peek: "full", full: "full" };
-  h.addEventListener("pointerdown", e => { y0 = e.clientY; moved = false; h.setPointerCapture(e.pointerId); });
-  h.addEventListener("pointermove", e => { if(y0 !== null && Math.abs(e.clientY - y0) > 30 && !moved){ moved = true; const st = sheetState(); setSheet(e.clientY < y0 ? up[st] : down[st]); } });
-  h.addEventListener("pointerup", () => { if(y0 !== null && !moved){ const st = sheetState(); setSheet(st === "full" ? false : st === "open" ? false : true); } y0 = null; });
-  h.addEventListener("keydown", e => { if(e.key === "ArrowDown"){ e.preventDefault(); setSheet(down[sheetState()]); } if(e.key === "ArrowUp"){ e.preventDefault(); setSheet(up[sheetState()]); } });
+// Sheet dragging: follows the finger 1:1, snaps to the nearest resting point, and a quick flick
+// moves one step in that direction. Drag from the handle, or from the content when it's scrolled to the top.
+(() => {
+  const s = $("#msheet"), h = $("#mhandle"), body = $("#msbody");
+  const ORDER = ["open", "peek", "full"], asArg = st => st === "open" ? true : st === "full" ? "full" : false;
+  let d = null;
+  const curY = () => parseFloat(s.style.getPropertyValue("--sy")) || 0;
+  const begin = y => { d = {y0: y, sy0: curY(), last: y, lt: performance.now(), v: 0, moved: false}; };
+  const follow = y => {
+    const max = sheetY("full"); let ny = d.sy0 + (y - d.y0);
+    if(ny < 0) ny = ny / 3; if(ny > max) ny = max + (ny - max) / 3;   // rubber band past the ends
+    s.classList.add("drag"); s.style.setProperty("--sy", ny + "px");
+    const vis = s.offsetHeight - Math.min(ny, sheetY("peek")), bh = Math.max(0, vis - h.offsetHeight);
+    if(bh > parseFloat(body.style.height || 0)) body.style.height = bh + "px";   // reveal content while pulling up
+    const now = performance.now(), dt = Math.max(1, now - d.lt); d.v = d.v * 0.4 + ((y - d.last) / dt) * 0.6; d.last = y; d.lt = now;
+  };
+  const finish = () => {
+    const g = d; d = null; s.classList.remove("drag"); if(!g || !g.moved) return false;
+    const y = curY(), ys = ORDER.map(sheetY);
+    let target = ORDER[ys.map(v => Math.abs(v - y)).indexOf(Math.min(...ys.map(v => Math.abs(v - y))))];
+    if(Math.abs(g.v) > 0.4){
+      const below = ORDER.filter((st, i) => ys[i] > y + 2), above = ORDER.filter((st, i) => ys[i] < y - 2);
+      target = g.v > 0 ? (below[0] || "full") : (above[above.length - 1] || "open");
+    }
+    setSheet(asArg(target)); return true;
+  };
+  // handle: pointer events (works for touch and mouse)
+  h.addEventListener("pointerdown", e => { begin(e.clientY); h.setPointerCapture(e.pointerId); });
+  h.addEventListener("pointermove", e => { if(!d) return; if(!d.moved && Math.abs(e.clientY - d.y0) > 3) d.moved = true; if(d.moved) follow(e.clientY); });
+  const hup = () => { if(!d) return; const moved = d.moved; finish(); if(!moved) setSheet(sheetSt === "peek" ? true : false); };
+  h.addEventListener("pointerup", hup); h.addEventListener("pointercancel", () => { d = null; setSheet(asArg(sheetSt)); });
+  h.addEventListener("click", e => e.preventDefault());
+  h.addEventListener("keydown", e => { const i = ORDER.indexOf(sheetSt);
+    if(e.key === "ArrowDown"){ e.preventDefault(); setSheet(asArg(ORDER[Math.min(2, i + 1)])); }
+    if(e.key === "ArrowUp"){ e.preventDefault(); setSheet(asArg(ORDER[Math.max(0, i - 1)])); }
+    if(e.key === "Enter" || e.key === " "){ e.preventDefault(); setSheet(sheetSt === "peek" ? true : false); } });
+  // content: pull down when scrolled to the top, or pull up while the sheet isn't fully open
+  let tY = null, mode = null;
+  body.addEventListener("touchstart", e => { if(e.touches.length !== 1){ tY = null; return; } tY = e.touches[0].clientY; mode = null; }, {passive: true});
+  body.addEventListener("touchmove", e => {
+    if(tY === null) return; const y = e.touches[0].clientY, dy = y - tY;
+    if(mode === null && Math.abs(dy) > 6){
+      mode = (dy > 0 && body.scrollTop <= 0) || (dy < 0 && sheetSt !== "open") ? "sheet" : "scroll";
+      if(mode === "sheet"){ begin(tY); d.moved = true; }
+    }
+    if(mode === "sheet" && d){ e.preventDefault(); follow(y); }
+  }, {passive: false});
+  const tend = () => { if(mode === "sheet") finish(); tY = null; mode = null; };
+  body.addEventListener("touchend", tend); body.addEventListener("touchcancel", tend);
 })();
 // pan, pinch and tap on the plan
 (() => {
@@ -1339,12 +1405,12 @@ function setView(v){
   $("#v-today").hidden = v !== "today"; $("#v-coll").hidden = v !== "coll"; $("#v-learn").hidden = v !== "learn";
   $("#views").hidden = v === "map"; $("#v-map").hidden = v !== "map";
   document.querySelectorAll(".tabbar [data-v]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.v === v)));
-  if(v === "today") renderToday(); if(v === "map") renderMapView(); if(v === "coll") renderColl(); if(v === "learn") renderLearn();
+  if(v === "today") renderToday(); if(v === "map"){ renderMapView(); placeSheet(sheetSt, false); } if(v === "coll") renderColl(); if(v === "learn") renderLearn();
   window.scrollTo({top: 0});
 }
 function refreshAll(){ if(view === "today") renderToday(); if(view === "map") renderMapView(); if(view === "coll") renderColl(); if(!$("#routepg").hidden) renderRoutePage(); }
 document.querySelector(".tabbar").addEventListener("click", e => { const b = e.target.closest("[data-v]"); if(!b) return; while(pageStack.length) closePage(pageStack[pageStack.length - 1]); if(b.dataset.v === "map" && view !== "map"){ selZone = null; focus = null; pinWork = null; } setView(b.dataset.v); });
-window.addEventListener("resize", () => { if(view === "map") document.documentElement.style.setProperty("--peek", Math.round(Math.min(300, Math.max(220, innerHeight * 0.36))) + "px"); });
+window.addEventListener("resize", () => { if(view === "map"){ sizeSheet(); placeSheet(sheetSt, false); } });
 
 if(here !== null){ const p = herePos(); if(p) mapFloor = fshort(p.f); }
 setView("today"); doSync();

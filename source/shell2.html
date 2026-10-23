@@ -147,22 +147,19 @@ a{color:var(--accent)}
 .floors button{width:40px;height:36px;border:0;border-radius:10px;background:transparent;font-size:13px;font-weight:700;color:var(--muted)}
 .floors button[aria-pressed="true"]{background:var(--ink);color:var(--ground);font-weight:800}
 .zoombtn{position:absolute;right:max(12px,env(safe-area-inset-right,0px));z-index:3}
-.msheet{position:absolute;left:0;right:0;bottom:0;height:var(--peek,300px);background:var(--surface);border-radius:24px 24px 0 0;box-shadow:0 -4px 20px var(--soft);z-index:4;display:flex;flex-direction:column;transition:height .25s ease}
-.msheet.open{height:calc(100% - env(safe-area-inset-top,0px) - 112px)}
-.handle{border:0;background:none;padding:10px 0 6px;display:grid;place-items:center;flex:none;touch-action:none}
+.msheet{position:absolute;left:0;right:0;bottom:0;height:calc(100% - env(safe-area-inset-top,0px) - 112px);background:var(--surface);border-radius:24px 24px 0 0;box-shadow:0 -4px 20px var(--soft);z-index:4;display:flex;flex-direction:column;
+  transform:translate3d(0,var(--sy,60%),0);transition:transform .34s cubic-bezier(.2,.85,.25,1);will-change:transform}
+.msheet.drag{transition:none}
+.handle{border:0;background:none;padding:12px 0 10px;width:100%;display:grid;place-items:center;flex:none;touch-action:none;cursor:grab}
 .handle i{width:40px;height:5px;border-radius:3px;background:var(--line);display:block}
 .handle .hint{display:none;font-size:12px;font-weight:700;color:var(--muted);margin-top:6px}
-.stage,.offplan{transition:top .25s ease,bottom .25s ease}
-.maptop{transition:transform .25s ease,opacity .2s ease}
-.floors{transition:top .25s ease}
-.mapview.full .msheet{height:calc(48px + 0px)}
-.mapview.full .msbody{display:none}
-.mapview.full .handle{padding:8px 0 10px}
+.maptop,.floors{transition:transform .3s cubic-bezier(.2,.85,.25,1),opacity .2s ease}
 .mapview.full .handle .hint{display:block}
-.mapview.full .stage,.mapview.full .offplan{top:calc(env(safe-area-inset-top,0px) + 12px);bottom:48px}
+.mapview.fullstage .stage,.mapview.fullstage .offplan{top:calc(env(safe-area-inset-top,0px) + 12px);bottom:56px}
 .mapview.full .maptop{transform:translateY(-140%);opacity:0;pointer-events:none}
-.mapview.full .floors{top:calc(env(safe-area-inset-top,0px) + 12px)}
-.msbody{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:4px max(18px,env(safe-area-inset-left,0px)) 24px;display:flex;flex-direction:column;gap:14px;max-width:592px;width:100%;margin:0 auto}
+.mapview.full .floors{transform:translateY(-108px)}
+@media (prefers-reduced-motion: reduce){.msheet,.maptop,.floors{transition:none}}
+.msbody{flex:none;overflow-y:auto;overscroll-behavior:contain;padding:4px max(18px,env(safe-area-inset-left,0px)) 24px;display:flex;flex-direction:column;gap:14px;max-width:592px;width:100%;margin:0 auto}
 .here{display:flex;gap:12px;align-items:center}
 .thumbs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .thumb{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:6px;min-width:0}
