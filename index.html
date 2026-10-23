@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Met Fifth Avenue Compass</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -21,7 +21,8 @@
 :root{
   --bg:#eef0ec; --surface:#ffffff; --ink:#1c2422; --muted:#5f6b66; --line:#d6dbd5;
   --accent:#8a2e2a; --accent-ink:#ffffff; --zone:#e1e6df; --zone-2:#d5dcd4; --closed:#cfd3ce;
-  --good:#2f6b45; --bad:#9a3a22; --scrim:rgba(14,18,17,.94); --wc:#2b5d8c;
+  --good:#2f6b45; --bad:#9a3a22; --scrim:rgba(14,18,17,.94); --wc:#2b5d8c; --food:#8a5a1f; --hi:#f1dedb;
+  --e-ancient:#a77a2f; --e-asia:#2f7a6e; --e-aoa:#8a5235; --e-medren:#5e4f97; --e-baroque:#9b3434; --e-c19:#2f68a3; --e-us:#557a2e; --e-modern:#4a4f55;
   --f-sign:"Overpass", "Helvetica Neue", Arial, sans-serif;
   --f-body:"Literata", Georgia, "Times New Roman", serif;
   --tabh:62px;
@@ -29,11 +30,11 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#121817; --surface:#1b2322; --ink:#e6ebe7; --muted:#9aa8a1; --line:#2e3936;
   --accent:#d6766c; --accent-ink:#121817; --zone:#24302d; --zone-2:#2b3734; --closed:#1f2628;
-  --good:#7cc49a; --bad:#e58a6d; --scrim:rgba(0,0,0,.94); --wc:#3b78b3; color-scheme:dark}}
+  --good:#7cc49a; --bad:#e58a6d; --scrim:rgba(0,0,0,.94); --wc:#3b78b3; --food:#c28a45; --hi:#3a2a28; --e-ancient:#d2a85a; --e-asia:#5fb3a5; --e-aoa:#c58660; --e-medren:#9d8fd6; --e-baroque:#d97070; --e-c19:#6ea3dc; --e-us:#8fb862; --e-modern:#a6acb3; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#121817; --surface:#1b2322; --ink:#e6ebe7; --muted:#9aa8a1; --line:#2e3936;
   --accent:#d6766c; --accent-ink:#121817; --zone:#24302d; --zone-2:#2b3734; --closed:#1f2628;
-  --good:#7cc49a; --bad:#e58a6d; --scrim:rgba(0,0,0,.94); --wc:#3b78b3; color-scheme:dark}
+  --good:#7cc49a; --bad:#e58a6d; --scrim:rgba(0,0,0,.94); --wc:#3b78b3; --food:#c28a45; --hi:#3a2a28; --e-ancient:#d2a85a; --e-asia:#5fb3a5; --e-aoa:#c58660; --e-medren:#9d8fd6; --e-baroque:#d97070; --e-c19:#6ea3dc; --e-us:#8fb862; --e-modern:#a6acb3; color-scheme:dark}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{background:var(--bg)}
 body{color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;margin:0;
@@ -53,7 +54,7 @@ button{cursor:pointer}
 /* tab bar */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);
   padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
-.tabbar .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);height:var(--tabh)}
+.tabbar .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);height:var(--tabh)}
 .tabbar button{background:none;border:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
   font-size:11px;font-weight:600;letter-spacing:.02em;color:var(--muted)}
 .tabbar svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -217,20 +218,97 @@ td:first-child{font-family:var(--f-sign);font-weight:800;white-space:nowrap}
 td:last-child{color:var(--muted);font-size:13px}
 .note{font-size:13px;color:var(--muted);margin:0}
 .note a{color:var(--accent)}
+/* header extras */
+.top .hr{display:flex;align-items:center;gap:10px;min-width:0}
+.iconbtn.sm{width:36px;height:36px}
+.iconbtn.sm svg{width:19px;height:19px}
+/* map layers */
+.layers{display:flex;gap:6px}
+.wcbtn{padding:0 10px}
+.wcbtn[data-k="food"][aria-pressed="true"]{background:var(--food);color:#fff}
+.foodm circle{fill:var(--food);stroke:var(--surface);stroke-width:2.5}
+.foodm path{fill:none;stroke:#fff;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.foodm text{fill:#fff;font-family:var(--f-sign);font-weight:800;font-size:10px}
+.fooddot{background:var(--food)}
+/* plan */
+.zone.hi rect{fill:var(--hi)}
+.route{fill:none;stroke:var(--accent);stroke-width:3;stroke-dasharray:7 5;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
+.stop circle{fill:var(--accent);stroke:var(--surface);stroke-width:2.5}
+.stop text{fill:var(--accent-ink);font-family:var(--f-sign);font-weight:800;font-size:9.5px}
+.preset{background:var(--surface);border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center}
+.preset h4{margin:0;font-family:var(--f-sign);font-weight:800;font-size:16px}
+.preset p{margin:0;font-size:14px;color:var(--muted);grid-column:1}
+.preset .btn{grid-row:1 / span 3;grid-column:2;padding:10px 14px;font-size:14px}
+.preset .meta{grid-column:1}
+.presets{display:flex;flex-direction:column;gap:10px}
+.floor-h{display:flex;justify-content:space-between;align-items:baseline;padding:4px 2px 0}
+.floor-h h3{margin:0;font-family:var(--f-sign);font-weight:800;font-size:16px}
+/* sheet extras */
+.actions.four{grid-template-columns:1fr 1fr}
+.btn.faved{color:var(--accent)}
+.btn svg{width:16px;height:16px;vertical-align:-2px;margin-right:4px}
+.listen{border:0;background:var(--surface);color:var(--ink);font-weight:800;font-size:13px;border-radius:999px;padding:7px 12px;display:inline-flex;align-items:center;gap:6px}
+.listen svg{width:14px;height:14px;fill:currentColor}
+.listen[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.note-in{width:100%;font-family:var(--f-body);font-size:16px;line-height:1.45;border:0;border-radius:12px;background:var(--surface);color:var(--ink);padding:12px 14px;resize:vertical;min-height:84px}
+.by-line{font-family:var(--f-sign);font-size:13px;color:var(--good)}
+.heart{display:inline-block;width:13px;height:13px;margin-right:5px;vertical-align:-1px;fill:var(--accent)}
+.field{width:100%;font-size:16px;font-weight:600;padding:11px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink)}
+.fieldrow{display:flex;gap:8px}
+.fieldrow .field{flex:1;min-width:0}
+.status{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-sign);font-size:13px;font-weight:600}
+.status i{width:9px;height:9px;border-radius:50%;background:var(--muted);display:inline-block}
+.status.ok i{background:var(--good)} .status.error i{background:var(--bad)} .status.syncing i{background:var(--food)}
+.code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;word-break:break-all;background:var(--bg);border-radius:10px;padding:10px 12px;user-select:all}
+.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--tabh) + env(safe-area-inset-bottom,0px) + 12px);z-index:45;
+  background:var(--ink);color:var(--bg);border-radius:12px;padding:10px 12px 10px 16px;display:flex;align-items:center;gap:12px;font-family:var(--f-sign);font-weight:600;font-size:14px;max-width:calc(100% - 32px);box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.toast button{border:0;background:transparent;color:var(--bg);font-weight:800;text-decoration:underline;font-size:14px;padding:4px}
+/* learn: picture quiz */
+.qimg{margin:0;border-radius:12px;overflow:hidden;background:var(--bg);display:grid;place-items:center}
+.qimg img{display:block;max-width:100%;max-height:44vh;object-fit:contain}
+.opts{display:grid;gap:8px}
+.opt{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);text-align:left;font-family:var(--f-sign);font-weight:600;font-size:15px;padding:12px 14px;border-radius:12px;line-height:1.3}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--good);background:var(--good);color:var(--surface)}
+.opt.wrong{border-color:var(--bad);color:var(--bad)}
+/* learn: timeline */
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-family:var(--f-sign);font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{width:10px;height:10px;border-radius:50%;background:var(--ec);display:inline-block}
+.tl{list-style:none;margin:0;padding:0;position:relative}
+.tl::before{content:"";position:absolute;left:83px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl-i{display:grid;grid-template-columns:70px 28px 1fr;align-items:center;min-height:64px}
+.tl-i .yr{font-family:var(--f-sign);font-weight:800;font-size:13px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
+.tl-i .dot{width:12px;height:12px;border-radius:50%;background:var(--ec);justify-self:center;box-shadow:0 0 0 3px var(--bg);position:relative}
+.tl-b{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:48px 1fr;gap:10px;align-items:center;padding:6px 8px;border-radius:10px;min-width:0}
+.tl-b:hover,.tl-b:focus-visible{background:var(--surface)}
+.tl-b:focus-visible{outline:3px solid var(--accent)}
+.tl-b .thumb{width:48px;height:48px}
+.tl-b .t{min-width:0}
+.tl-b b{display:block;font-family:var(--f-sign);font-weight:800;font-size:14px;line-height:1.25}
+.tl-b .s{display:block;font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl .gap{display:grid;grid-template-columns:70px 28px 1fr;align-items:center;height:30px}
+.tl .gap span{grid-column:3;font-family:var(--f-sign);font-size:12px;color:var(--muted);font-style:italic;padding-left:8px}
+.tl .gap::before{content:"";grid-column:2;justify-self:center;width:2px;height:100%;background:repeating-linear-gradient(var(--bg) 0 3px,var(--line) 3px 6px);position:relative;z-index:1}
+.e-ancient{--ec:var(--e-ancient)} .e-asia{--ec:var(--e-asia)} .e-aoa{--ec:var(--e-aoa)} .e-medren{--ec:var(--e-medren)}
+.e-baroque{--ec:var(--e-baroque)} .e-c19{--ec:var(--e-c19)} .e-us{--ec:var(--e-us)} .e-modern{--ec:var(--e-modern)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 
 </head>
 <body>
 <div class="app">
-  <header class="top"><h1 id="vtitle">Map</h1><span class="sub" id="vsub">The Met Fifth Avenue</span></header>
+  <header class="top"><h1 id="vtitle">Map</h1><div class="hr"><span class="sub" id="vsub">The Met Fifth Avenue</span><button class="iconbtn sm" id="gear" aria-label="Settings and sharing"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button></div></header>
 
   <section class="view" id="v-map">
     <div class="maprow"><div class="seg" id="mfloor"><button aria-pressed="true" data-f="1">Floor 1</button><button aria-pressed="false" data-f="2">Floor 2</button></div>
-      <button class="wcbtn" id="wc" aria-pressed="false" aria-label="Show restrooms"><svg viewBox="0 0 24 24"><circle cx="7.5" cy="4.5" r="1.8"/><circle cx="16.5" cy="4.5" r="1.8"/><path d="M5.5 8h4l1 7H9v6H6v-6H4.5zM14.5 8h4l1.8 7.5h-2.3V21h-3v-5.5h-2.3z"/></svg>Restrooms</button></div>
+      <div class="layers"><button class="wcbtn" id="wc" data-k="wc" aria-pressed="false" aria-label="Show restrooms"><svg viewBox="0 0 24 24"><circle cx="7.5" cy="4.5" r="1.8"/><circle cx="16.5" cy="4.5" r="1.8"/><path d="M5.5 8h4l1 7H9v6H6v-6H4.5zM14.5 8h4l1.8 7.5h-2.3V21h-3v-5.5h-2.3z"/></svg>Restrooms</button>
+      <button class="wcbtn" id="food" data-k="food" aria-pressed="false" aria-label="Show food and information"><svg viewBox="0 0 24 24" style="fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM16 10h1.5a2.5 2.5 0 0 1 0 5H16M8 3v3M12 3v3"/></svg>Food</button></div></div>
     <div class="map"><svg id="map-main" viewBox="0 0 400 336" role="img" aria-label="Schematic floor plan"></svg></div>
     <div class="card" id="area"></div>
     <div id="baths" class="view" hidden></div>
+    <div id="foods" class="view" hidden></div>
     <div class="rows" id="area-works"></div>
     <details class="more" id="rules">
       <summary>How the building works</summary>
@@ -252,7 +330,20 @@ td:last-child{color:var(--muted);font-size:13px}
     <div id="wlist" class="view"></div>
   </section>
 
-  <section class="view" id="v-drill" hidden>
+  <section class="view" id="v-plan" hidden>
+    <div class="card" id="plan-sum"></div>
+    <div id="plan-mapbox" class="view" hidden>
+      <div class="seg" id="pfloor"><button aria-pressed="true" data-f="1">Floor 1</button><button aria-pressed="false" data-f="2">Floor 2</button></div>
+      <div class="map"><svg id="map-plan" viewBox="0 0 400 336" role="img" aria-label="Your route on the plan"></svg></div>
+    </div>
+    <div id="plan-list" class="view"></div>
+    <div class="era-h"><h3>Ready-made plans</h3><p>Load one to start, then add or remove works as you like. Loading replaces your current plan.</p></div>
+    <div class="presets" id="presets"></div>
+  </section>
+
+  <section class="view" id="v-learn" hidden>
+    <div class="seg" id="lmode"><button aria-pressed="true" data-m="layout">Layout</button><button aria-pressed="false" data-m="pics">Pictures</button><button aria-pressed="false" data-m="time">Timeline</button></div>
+    <div class="view" id="l-layout">
     <div class="qcard">
       <span class="label" id="qlabel">Drill</span>
       <p class="q" id="q">Ten landmarks and famous works. Find each one on the plan.</p>
@@ -261,6 +352,18 @@ td:last-child{color:var(--muted);font-size:13px}
     <div class="seg" id="dfloor"><button aria-pressed="true" data-f="1">Floor 1</button><button aria-pressed="false" data-f="2">Floor 2</button></div>
     <div class="map"><svg id="map-drill" viewBox="0 0 400 336" role="img" aria-label="Plan for the drill"></svg></div>
     <div class="actions"><button class="btn" id="qstart">Start drill</button><button class="btn quiet" id="qskip" disabled>Show answer</button></div>
+    <div class="actions" style="grid-template-columns:1fr" id="qmissrow" hidden><button class="btn quiet" id="qmiss"></button></div>
+    <p class="small" id="qinfo"></p>
+    </div>
+    <div class="view" id="l-pics" hidden>
+      <div class="chips" id="pmode" role="group" aria-label="Quiz type"></div>
+      <div class="qcard" id="pcard"></div>
+    </div>
+    <div class="view" id="l-time" hidden>
+      <div class="era-h"><p>All 100 works on one line, oldest first. Dashed breaks mark long stretches with nothing on the list. Colors show the period each work belongs to in the Works tab.</p></div>
+      <div class="legend" id="tl-legend"></div>
+      <ol class="tl" id="tl"></ol>
+    </div>
   </section>
 
   <section class="view" id="v-find" hidden>
@@ -270,19 +373,21 @@ td:last-child{color:var(--muted);font-size:13px}
       <div class="numrow"><input class="num" id="gal" inputmode="numeric" pattern="[0-9]*" maxlength="3" placeholder="822" aria-label="Gallery number"><button class="btn" id="gal-go">Find</button></div>
       <div id="gal-out"></div>
     </div>
+    <div class="card bath" id="near-wc" hidden></div>
     <div class="rows" id="near"></div>
     <details class="more">
       <summary>What the numbers mean</summary>
       <div class="table-wrap"><table><tbody id="ranges"></tbody></table></div>
     </details>
-    <p class="note">An unofficial study guide, not made by the Met. The plan is a schematic, and the Met moves works between rooms. As of October 2026 the Modern and Contemporary galleries and the roof garden are closed while the Tang Wing is built, with opening planned for 2030. Images are from <a href="https://www.metmuseum.org/about-the-met/policies-and-documents/open-access" target="_blank" rel="noopener">The Met's Open Access program</a>, plus four from Wikimedia Commons, credited on each work. Popularity comes from <a href="https://pageviews.wmcloud.org/" target="_blank" rel="noopener">Wikipedia page views</a>.</p>
+    <p class="note">An unofficial study guide, not made by the Met. The plan is a schematic, and the Met moves works between rooms. As of October 2026 the Modern and Contemporary galleries and the roof garden are closed while the Tang Wing is built, with opening planned for 2030. Images are from <a href="https://www.metmuseum.org/about-the-met/policies-and-documents/open-access" target="_blank" rel="noopener">The Met's Open Access program</a>, plus seven from Wikipedia and Wikimedia Commons, credited on each work. Popularity comes from <a href="https://pageviews.wmcloud.org/" target="_blank" rel="noopener">Wikipedia page views</a>.</p>
   </section>
 </div>
 
 <nav class="tabbar" aria-label="Sections"><div class="in" role="tablist">
   <button role="tab" data-v="map" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M9 4 3 6.5v13L9 17l6 2.5 6-2.5V4l-6 2.5z"/><path d="M9 4v13M15 6.5v13"/></svg>Map</button>
   <button role="tab" data-v="works" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>Works</button>
-  <button role="tab" data-v="drill" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>Drill</button>
+  <button role="tab" data-v="plan" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/></svg>Plan</button>
+  <button role="tab" data-v="learn" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M3 9l9-5 9 5-9 5z"/><path d="M7 11.2V16c0 1.4 2.2 3 5 3s5-1.6 5-3v-4.8M21 9v6"/></svg>Learn</button>
   <button role="tab" data-v="find" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M5 9h15M4 15h15M10 4 8 20M16 4l-2 16"/></svg>Find</button>
 </div></nav>
 
@@ -295,6 +400,11 @@ td:last-child{color:var(--muted);font-size:13px}
   </div>
   <div class="body" id="s-body"></div>
 </div>
+<div class="sheet" id="settings" hidden role="dialog" aria-modal="true" aria-labelledby="set-title">
+  <div class="bar-top"><button class="iconbtn" id="set-close" aria-label="Close settings"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button></div>
+  <div class="body" id="set-body"></div>
+</div>
+<div class="toast" id="toast" hidden role="status"><span id="toast-msg"></span><button id="toast-btn" hidden></button></div>
 <div class="lightbox" id="lightbox" hidden><img id="lb-img" alt=""><button class="iconbtn" id="lb-close" aria-label="Close image"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
 
 <script>
@@ -775,6 +885,22 @@ const BATH = [
  {f:4, lvl:"4", x:null, y:null, name:"Floor 4, by the elevator", where:"Floor 4 · reached from Gallery 555 on Floor 1",
   how:"Take the elevator in the European Sculpture and Decorative Arts galleries near Gallery 555 up to Floor 4. The nursing room is on this floor too.", tip:"Quiet, and the place to go for the lactation room."}
 ];
+
+// Food, drink and information points, from the Met's official map (October 2026).
+const FOOD = [
+ {f:1, x:130, y:104, k:"cafe", name:"Petrie Court Café", where:"Floor 1 · European Sculpture, park side",
+  how:"Walk through European Sculpture and Decorative Arts to the glass-walled Petrie Court. The café is at the park end.", tip:"Sit-down café with views of Central Park. The restrooms by Gallery 399 are steps away."},
+ {f:1, x:300, y:34, k:"cafe", name:"American Wing Café", where:"Floor 1 · American Wing",
+  how:"In the American Wing, at the edge of the Engelhard Court garden.", tip:"Coffee and quick bites among the sculpture."},
+ {f:1, x:184, y:262, k:"info", name:"Information desk", where:"Floor 1 · Great Hall",
+  how:"In the middle of the Great Hall as you walk in.", tip:"Pick up a printed map and ask what's on view today."},
+ {f:2, x:238, y:262, k:"cafe", name:"The Balcony Lounge", where:"Floor 2 · Great Hall Balcony",
+  how:"At the top of the Grand Staircase, on the Balcony overlooking the Great Hall.", tip:"Drinks and light bites with a view down into the Great Hall."},
+ {f:0, x:null, y:null, k:"cafe", name:"The Eatery", where:"Ground floor · under the Lehman Wing",
+  how:"Take the stairs down from the Robert Lehman Wing on Floor 1. The Eatery is at the bottom, next to the restrooms.", tip:"The biggest and most casual option. Good with kids."}
+];
+const FOOD_HINTS = [{f:1, x:182, y:32, t:"G↓"}];
+const YEAR = [-2900, -2381, -2090, -1981, -1961, -1479, -1386, -883, -883, -604, -750, -590, -530, -530, -250, 100, -50, 260, -15, 525, 750, 1050, 1319, 1330, -1050, 1981, 1830, 1354, 1525, 1575, 1707, -1200, 1250, 1550, 1720, 1850, 1960, 1970, 629, 1763, 1750, 1290, 1436, 1449, 1490, 1478, 1506, 1504, 1544, 1586, 1525, 1350, 1565, 1565, 1599, 1597, 1620, 1630, 1616, 1653, 1660, 1650, 1662, 1656, 1693, 1720, 1787, 1787, 1785, 1804, 1851, 1852, 1865, 1866, 1867, 1874, 1874, 1878, 1878, 1887, 1887, 1889, 1891, 1890, 1899, 1912, 1836, 1851, 1859, 1871, 1883, 1883, 1892, 1899, 1912, 1923, 1905, 1928, 1931, 1950];
 const WC_HINTS = [{f:1, x:34, y:321, t:"G↓"}, {f:1, x:182, y:32, t:"G↓"}];
 // Tiers are an editorial judgment: what to prioritize on a short visit.
 const MUST = [5,8,19,22,26,31,37,51,53,55,60,63,67,77,79,82,88,89,92,94];
@@ -786,7 +912,7 @@ const TIER_NAME = {must:"Must-see", classic:"Classic", deep:"Deep cut"};
 const VIEWS = {"1": [6154, "Tell Asmar Hoard"], "2": [460, "Tomb of Perneb"], "5": [1803, "William (hippopotamus figurine)"], "12": [1412, "New York Kouros"], "14": [1390, "Monteleone chariot"], "17": [2358, "Villa Boscoreale"], "19": [6597, "Temple of Dendur"], "21": [395, "Night-Shining White"], "26": [943, "Astor Court (Metropolitan Museum of Art)"], "27": [113941, "The Great Wave off Kanagawa"], "29": [2842, "Shahnameh of Shah Tahmasp"], "34": [3311, "Benin ivory mask"], "37": [552, "Bisj Pole"], "39": [403, "David Plates"], "42": [2903, "Madonna and Child (Duccio, Metropolitan)"], "43": [2205, "Crucifixion and Last Judgement diptych"], "44": [853, "A Goldsmith in His Shop"], "45": [537, "Annunciation (Botticelli, New York)"], "46": [433, "Studiolo from the Ducal Palace in Gubbio"], "47": [161, "Patio from the Castle of Vélez Blanco"], "48": [687, "Madonna and Child Enthroned with Saints (Raphael)"], "53": [3212, "The Harvesters (painting)"], "55": [5980, "View of Toledo"], "56": [4594, "The Musicians (Caravaggio)"], "57": [631, "Esther Before Ahasuerus (Artemisia Gentileschi)"], "58": [597, "The Fortune Teller (La Tour)"], "59": [537, "A Faun Teased by Children"], "60": [2003, "Aristotle with a Bust of Homer"], "61": [569, "Self-Portrait (Rembrandt, Altman)"], "62": [4177, "Portrait of Juan de Pareja"], "63": [2315, "Woman with a Water Jug"], "64": [1159, "A Girl Asleep"], "65": [150, "Gould Stradivarius"], "67": [29937, "The Death of Socrates"], "68": [867, "Manuel Osorio Manrique de Zúñiga"], "69": [641, "Self-Portrait with Two Pupils"], "71": [2055, "The Princesse de Broglie"], "72": [3023, "The Horse Fair"], "73": [18, "Ugolino and His Sons"], "74": [52, "Woman with a Parrot"], "75": [1751, "Garden at Sainte-Adresse"], "76": [804, "Boating (Manet)"], "77": [1949, "The Dance Class (Degas, Metropolitan Museum of Art)"], "78": [1197, "Madame Georges Charpentier and Her Children"], "79": [16426, "Little Dancer of Fourteen Years"], "80": [2019, "Parade de cirque"], "82": [6078, "Wheat Field with Cypresses"], "83": [1049, "Ia Orana Maria"], "84": [12112, "The Card Players"], "87": [5139, "The Oxbow"], "88": [20430, "Washington Crossing the Delaware (1851 paintings)"], "89": [2522, "The Heart of the Andes"], "90": [1326, "Max Schmitt in a Single Scull"], "91": [156, "Lady at the Tea Table"], "92": [30314, "Portrait of Madame X"], "93": [1544, "Diana (Saint-Gaudens)"], "94": [5001, "The Gulf Stream (painting)"], "95": [10, "Francis W. Little House"], "97": [2521, "Portrait of Gertrude Stein"], "98": [2439, "I Saw the Figure 5 in Gold"], "99": [1999, "Cow's Skull: Red, White, and Blue"], "100": [9098, "Autumn Rhythm (Number 30)"]};
 const VIEWS_RANGE = "the 60 days from Aug 23 to Oct 21, 2026";
 // Images for works the Met's API doesn't release, taken from Wikimedia Commons with their licenses.
-const WIKI_IMG = {"75": {"page": "https://commons.wikimedia.org/wiki/File:Garden_at_Sainte-Adresse_MET_DT48.jpg", "license": "CC0", "artist": "Claude Monet"}, "91": {"page": "https://commons.wikimedia.org/wiki/File:Lady_at_the_Tea_Table_MET_DT516.jpg", "license": "CC0", "artist": "Mary Cassatt"}, "26": {"page": "https://commons.wikimedia.org/wiki/File:Astor_Court,_the_Met,_Manhattan_Oct_2017.jpg", "license": "CC0", "artist": "Thomson200"}, "85": {"page": "https://commons.wikimedia.org/wiki/File:Bridge_over_a_Pond_of_Water_Lilies_MET_DT1854.jpg", "license": "CC0", "artist": "Claude Monet"}};
+const WIKI_IMG = {"75": {"page": "https://commons.wikimedia.org/wiki/File:Garden_at_Sainte-Adresse_MET_DT48.jpg", "license": "CC0", "artist": "Claude Monet"}, "91": {"page": "https://commons.wikimedia.org/wiki/File:Lady_at_the_Tea_Table_MET_DT516.jpg", "license": "CC0", "artist": "Mary Cassatt"}, "26": {"page": "https://commons.wikimedia.org/wiki/File:Astor_Court,_the_Met,_Manhattan_Oct_2017.jpg", "license": "CC0", "artist": "Thomson200"}, "85": {"page": "https://commons.wikimedia.org/wiki/File:Bridge_over_a_Pond_of_Water_Lilies_MET_DT1854.jpg", "license": "CC0", "artist": "Claude Monet"}, "97": {"page": "https://en.wikipedia.org/wiki/File:GertrudeStein.JPG", "license": "Public domain in the US", "artist": "Pablo Picasso"}, "98": {"page": "https://commons.wikimedia.org/wiki/File:NY_Met_demuth_figure_5_gold.JPG", "license": "Public domain", "artist": "Charles Demuth"}, "37": {"page": "https://commons.wikimedia.org/wiki/File:Asmat_bis_poles_from_Indonesian_New_Guinea_-_the_poles_are_named_for_deceased_people_and_the_huge_phalluses_on_top_represent_fertility._-_panoramio.jpg", "license": "CC BY 3.0", "artist": "Photo: olekinderhook", "note": "Taken at the Met in 2010, before the wing was renovated"}};
 Object.keys(WIKI_IMG).forEach(n => IMG.add(+n));
 </script>
 <script>
@@ -802,9 +928,25 @@ let view = "map", mapFloor = 1, mapSel = "great", pinWork = null;
 let eraFilter = "all", hideSeen = false, query = "", tierFilter = "all", sortMode = "time";
 let list = [], sheetIdx = -1;
 let quiz = null, drillFloor = 1;
+// Everything the viewer marks: {seen|fav|notes: {workNumber: {v, t, by}}}. Saved on the phone; optionally synced.
+let store = {seen:{}, fav:{}, notes:{}};
+try { const s0 = JSON.parse(localStorage.getItem("met-store") || "null"); if(s0) store = Object.assign(store, s0); } catch(e) {}
+try { const old = JSON.parse(localStorage.getItem("met-seen") || "null");
+  if(old && old.length && !Object.keys(store.seen).length) old.forEach(n => store.seen[n] = {v:true, t:Date.now(), by:""}); } catch(e) {}
+let cfg = {name:"", url:"", code:""};
+try { cfg = Object.assign(cfg, JSON.parse(localStorage.getItem("met-cfg") || "{}")); } catch(e) {}
+const saveCfg = () => { try { localStorage.setItem("met-cfg", JSON.stringify(cfg)); } catch(e) {} };
 let seen = new Set();
-try { seen = new Set(JSON.parse(localStorage.getItem("met-seen") || "[]")); } catch(e) {}
-const saveSeen = () => { try { localStorage.setItem("met-seen", JSON.stringify([...seen])); } catch(e) {} };
+const rebuild = () => { seen = new Set(Object.keys(store.seen).filter(k => store.seen[k] && store.seen[k].v).map(Number)); };
+rebuild();
+const saveStore = () => { try { localStorage.setItem("met-store", JSON.stringify(store)); } catch(e) {} };
+const isFav = n => !!(store.fav[n] && store.fav[n].v);
+const noteOf = n => (store.notes[n] && store.notes[n].v) || "";
+function setItem(kind, n, v){ store[kind][n] = {v, t:Date.now(), by:cfg.name || ""}; saveStore(); rebuild(); queueSync(); }
+let plan = [];
+try { plan = JSON.parse(localStorage.getItem("met-plan") || "[]").filter(n => n >= 1 && n <= 100); } catch(e) {}
+const savePlan = () => { try { localStorage.setItem("met-plan", JSON.stringify(plan)); } catch(e) {} };
+let showFood = false;
 const countIn = id => W.filter(w => w[3] === id).length;
 const workZone = n => W[n-1][3] ? byId(W[n-1][3]) : null;
 function metLink(n){
@@ -814,13 +956,14 @@ function metLink(n){
 const locText = n => { const z = workZone(n); return z ? `Floor ${z.f} · ${z.name.split(",")[0]}${GAL[n] ? " · Gallery " + GAL[n] : ""}` : "Not on the plan right now"; };
 const thumb = n => IMG.has(n) ? `<img class="thumb" src="img/${n}.jpg" alt="" loading="lazy">` : `<span class="thumb none" aria-hidden="true">${n}</span>`;
 const tick = n => `<span class="tick${seen.has(n)?" on":""}" aria-label="${seen.has(n)?"Seen":"Not seen"}">${seen.has(n)?'<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>':""}</span>`;
+const HEART = '<svg class="heart" viewBox="0 0 24 24" aria-label="Favorite"><path d="M12 21s-7.5-4.6-9.5-9.1C1.1 8.6 3.2 5 6.7 5c2 0 3.6 1.1 4.3 2.6h2C13.7 6.1 15.3 5 17.3 5c3.5 0 5.6 3.6 4.2 6.9C19.5 16.4 12 21 12 21z"/></svg>';
 const fmtViews = v => v >= 1e6 ? (v/1e6).toFixed(1).replace(/\.0$/,"") + "M" : v >= 1e3 ? Math.round(v/1e3) + "K" : String(v);
 const rankAll = n => Object.keys(VIEWS).map(Number).sort((a,b) => VIEWS[b][0] - VIEWS[a][0]).indexOf(n) + 1;
 const tierTag = n => `<span class="tier t-${tierOf(n)}">${TIER_NAME[tierOf(n)]}</span>`;
 const row = (n, rank) => { const w = W[n-1];
   const extra = rank ? `<span class="rank">${rank}</span>` : "";
   const vw = (sortMode === "famous" && VIEWS[n]) ? `<span class="vw">${fmtViews(VIEWS[n][0])} views</span>` : "";
-  return `<button class="row" data-w="${n}">${thumb(n)}<span class="t"><b>${extra}${w[0]}</b><span class="s">${w[1]} · ${w[2]}</span><span class="l">${tierTag(n)}${vw}${locText(n)}</span></span>${tick(n)}</button>`; };
+  return `<button class="row" data-w="${n}">${thumb(n)}<span class="t"><b>${extra}${isFav(n) ? HEART : ""}${w[0]}</b><span class="s">${w[1]} · ${w[2]}</span><span class="l">${tierTag(n)}${vw}${locText(n)}</span></span>${tick(n)}</button>`; };
 
 /* ---------- map drawing ---------- */
 function drawMap(svg, floor, o){
@@ -834,7 +977,7 @@ function drawMap(svg, floor, o){
   Z.filter(z => z.f === floor).forEach(z => {
     const el = document.createElementNS(svgNS,"g");
     const cls = z.fixed ? ["fixed"] : ["zone"];
-    if(!z.fixed){ if(k++ % 2) cls.push("alt"); if(z.closed) cls.push("closed"); if(o.sel === z.id) cls.push("sel"); if(o.marks && o.marks[z.id]) cls.push(o.marks[z.id]); }
+    if(!z.fixed){ if(k++ % 2) cls.push("alt"); if(z.closed) cls.push("closed"); if(o.sel === z.id) cls.push("sel"); if(o.hi && o.hi.has(z.id)) cls.push("hi"); if(o.marks && o.marks[z.id]) cls.push(o.marks[z.id]); }
     el.setAttribute("class", cls.join(" "));
     if(!z.fixed){ el.setAttribute("tabindex","0"); el.setAttribute("role","button"); el.setAttribute("aria-label", z.name); }
     const r = document.createElementNS(svgNS,"rect");
@@ -866,6 +1009,31 @@ function drawMap(svg, floor, o){
       g.appendChild(p);
     }
   }
+  if(o.route){
+    if(o.route.pts.length > 1){
+      const pl = document.createElementNS(svgNS,"polyline"); pl.setAttribute("class","route");
+      pl.setAttribute("points", o.route.pts.map(p => p.join(",")).join(" ")); g.appendChild(pl);
+    }
+    o.route.stops.forEach(st => {
+      const m = document.createElementNS(svgNS,"g"); m.setAttribute("class","stop");
+      m.innerHTML = `<circle cx="${st.x}" cy="${st.y}" r="10.5"></circle><text x="${st.x}" y="${st.y+3.5}" text-anchor="middle">${st.label}</text>`;
+      g.appendChild(m);
+    });
+  }
+  if(o.food){
+    FOOD.filter(b => b.f === floor && b.x !== null).forEach(b => {
+      const m = document.createElementNS(svgNS,"g"); m.setAttribute("class","foodm");
+      m.innerHTML = `<circle cx="${b.x}" cy="${b.y}" r="11"></circle>` + (b.k === "info"
+        ? `<text x="${b.x}" y="${b.y+3.8}" text-anchor="middle" style="font-family:Georgia,serif;font-style:italic;font-size:12px">i</text>`
+        : `<path transform="translate(${b.x} ${b.y})" d="M-5.5 -3.5h8v4a4 4 0 0 1-4 4h0a4 4 0 0 1-4-4zM2.5 -2.5h1.3a1.8 1.8 0 0 1 0 3.6H2.5"/>`);
+      g.appendChild(m);
+    });
+    FOOD_HINTS.filter(h => h.f === floor).forEach(h => {
+      const m = document.createElementNS(svgNS,"g"); m.setAttribute("class","wcm down");
+      m.innerHTML = `<circle cx="${h.x}" cy="${h.y}" r="10"></circle><text x="${h.x}" y="${h.y+3.5}" text-anchor="middle">${h.t}</text>`;
+      g.appendChild(m);
+    });
+  }
   if(o.wc){
     BATH.filter(b => b.f === floor && b.x !== null).forEach(b => {
       const m = document.createElementNS(svgNS,"g"); m.setAttribute("class","wcm");
@@ -886,11 +1054,12 @@ function segSet(el, f){ el.querySelectorAll("button").forEach(b => b.setAttribut
 /* ---------- Map view ---------- */
 function renderMap(){
   segSet($("#mfloor"), mapFloor);
-  $("#wc").setAttribute("aria-pressed", String(showWC));
-  $("#baths").hidden = !showWC; $("#area").hidden = showWC; if(showWC) $("#area-works").hidden = true;
-  if(showWC) renderBaths();
-  drawMap($("#map-main"), mapFloor, {wc: showWC, sel: showWC ? null : mapSel, badges: !showWC, pin: pinWork ? W[pinWork-1][3] : null, onPick: id => { pinWork = null; mapSel = id; renderMap(); }});
-  if(showWC) return;
+  const layer = showWC || showFood;
+  $("#wc").setAttribute("aria-pressed", String(showWC)); $("#food").setAttribute("aria-pressed", String(showFood));
+  $("#baths").hidden = !showWC; $("#foods").hidden = !showFood; $("#area").hidden = layer; if(layer) $("#area-works").hidden = true;
+  if(showWC) renderBaths(); if(showFood) renderFoods();
+  drawMap($("#map-main"), mapFloor, {wc: showWC, food: showFood, sel: layer ? null : mapSel, badges: !layer, pin: pinWork ? W[pinWork-1][3] : null, onPick: id => { pinWork = null; showWC = showFood = false; mapSel = id; renderMap(); }});
+  if(layer) return;
   const z = byId(mapSel);
   if(!z || z.f !== mapFloor){ $("#area").innerHTML = `<p class="meta">Tap an area on the plan.</p>`; $("#area-works").innerHTML = ""; $("#area-works").hidden = true; return; }
   let pinLine = "";
@@ -912,7 +1081,17 @@ function renderBaths(){
     `<p class="note">Locations from the Met's official map, <a href="https://maps.metmuseum.org/" target="_blank" rel="noopener">maps.metmuseum.org</a>, October 2026. Tips on crowds and access from Untapped New York, City Guide NY and Paint the Town Mobile.</p>`;
   $("#baths").querySelectorAll("[data-bf]").forEach(x => x.addEventListener("click", () => { mapFloor = +x.dataset.bf; renderMap(); window.scrollTo({top:0, behavior: reduce ? "auto" : "smooth"}); }));
 }
-$("#wc").addEventListener("click", () => { showWC = !showWC; pinWork = null; renderMap(); });
+$("#wc").addEventListener("click", () => { showWC = !showWC; if(showWC) showFood = false; pinWork = null; renderMap(); });
+$("#food").addEventListener("click", () => { showFood = !showFood; if(showFood) showWC = false; pinWork = null; renderMap(); });
+function renderFoods(){
+  const order = FOOD.slice().sort((a,b) => (a.f === mapFloor ? 0 : 1) - (b.f === mapFloor ? 0 : 1));
+  $("#foods").innerHTML = `<div class="card"><span class="label">Food and information</span>
+      <p>Cafés, the lounge and the information desk.${mapFloor === 1 ? " G↓ marks the stairs down to The Eatery." : ""} Opening times vary by day, so check at the information desk.</p></div>` +
+    order.map(b => `<div class="card bath"><div class="bh"><span class="wcdot fooddot">${b.f === 0 ? "G" : b.f}</span><div><h2>${b.name}</h2><span class="meta">${b.where}</span></div></div>
+      <p>${b.how}</p><p class="small">${b.tip}${b.f !== mapFloor && b.x !== null ? ` <button class="toggle" data-ff="${b.f}">Show on Floor ${b.f}</button>` : ""}</p></div>`).join("") +
+    `<p class="note">Locations from the Met's official map, <a href="https://maps.metmuseum.org/" target="_blank" rel="noopener">maps.metmuseum.org</a>, October 2026.</p>`;
+  $("#foods").querySelectorAll("[data-ff]").forEach(x => x.addEventListener("click", () => { mapFloor = +x.dataset.ff; renderMap(); window.scrollTo({top:0, behavior: reduce ? "auto" : "smooth"}); }));
+}
 $("#mfloor").addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; mapFloor = +b.dataset.f; pinWork = null; renderMap(); });
 $("#area-works").addEventListener("click", e => { const b = e.target.closest("[data-w]"); if(b) openSheet(+b.dataset.w, [...$("#area-works").querySelectorAll("[data-w]")].map(x => +x.dataset.w)); });
 
@@ -973,11 +1152,12 @@ function showWork(n){
   const w = W[n-1], z = workZone(n), [look, story] = L[n-1];
   const hero = IMG.has(n)
     ? `<figure class="hero"><button id="zoom" aria-label="View larger"><img src="img/${n}.jpg" alt="${esc(w[0])}, ${esc(w[1])}"></button></figure>
-       <p class="credit">${WIKI_IMG[n] ? `Image: <a href="${WIKI_IMG[n].page}" target="_blank" rel="noopener">Wikimedia Commons</a> · ${esc(WIKI_IMG[n].artist)} · ${esc(WIKI_IMG[n].license)}` : `Image: <a href="${metLink(n)}" target="_blank" rel="noopener">The Met</a> · Open Access, public domain`}</p>`
+       <p class="credit">${WIKI_IMG[n] ? `Image: <a href="${WIKI_IMG[n].page}" target="_blank" rel="noopener">Wikimedia Commons</a> · ${esc(WIKI_IMG[n].artist)} · ${esc(WIKI_IMG[n].license)}${WIKI_IMG[n].note ? " · " + esc(WIKI_IMG[n].note) : ""}` : `Image: <a href="${metLink(n)}" target="_blank" rel="noopener">The Met</a> · Open Access, public domain`}</p>`
     : `<figure class="hero ph"><b>${w[0]}</b><span>${MET_ID[n] ? "Still under copyright, so the Met doesn't release this image." : "No open-access image."}</span><a class="small" style="color:var(--accent)" href="${metLink(n)}" target="_blank" rel="noopener">See it on metmuseum.org</a></figure>`;
   $("#s-body").innerHTML = `${hero}
     <div class="title"><span class="label">No. ${n} · ${ERAS.find(e => e[0] === w[4])[1]}</span>
       <h2 id="s-title">${w[0]}</h2><div class="by">${w[1]} · ${w[2]}</div>
+      ${canSpeak ? `<div style="margin-top:10px"><button class="listen" id="s-say" aria-pressed="${speakingN === n}"><svg viewBox="0 0 24 24">${speakingN === n ? '<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>' : '<path d="M7 4.5v15l12-7.5z"/>'}</svg>${speakingN === n ? "Stop" : "Listen to this lesson"}</button></div>` : ""}
       <div class="tags">${tierTag(n)}${VIEWS[n] ? `<a class="meta wv" href="https://en.wikipedia.org/wiki/${encodeURIComponent(VIEWS[n][1].replace(/ /g,"_"))}" target="_blank" rel="noopener">${fmtViews(VIEWS[n][0])} Wikipedia views in 60 days · #${rankAll(n)} of ${Object.keys(VIEWS).length}</a>` : ""}${w[6] ? `<span class="pill">${w[6]}</span>` : ""}</div></div>
     <p style="margin:0">${w[5]}</p>
     <div class="why"><span class="label">Why it made the list</span><p>${WHY[n-1]}</p></div>
@@ -987,26 +1167,41 @@ function showWork(n){
       <b style="grid-column:1">${z ? `Floor ${z.f} · ${z.name.split(",")[0]}` : "Not on the plan right now"}</b>
       <span class="meta">${z ? (GAL[n] ? "Gallery " + GAL[n] : z.gal) : "The modern galleries are closed for the Tang Wing."}</span>
       ${z ? `<button class="btn quiet go" id="s-map">Show on map</button>` : ""}</div>
-    <div class="actions"><button class="btn ${seen.has(n) ? "done" : ""}" id="s-seen">${seen.has(n) ? "✓ Seen" : "Mark as seen"}</button>
-      <a class="btn quiet" href="${metLink(n)}" target="_blank" rel="noopener">Met record</a></div>
+    <div class="actions four">
+      <button class="btn ${seen.has(n) ? "done" : ""}" id="s-seen">${seen.has(n) ? "✓ Seen" : "Mark as seen"}</button>
+      <button class="btn quiet ${isFav(n) ? "faved" : ""}" id="s-fav" aria-pressed="${isFav(n)}"><svg viewBox="0 0 24 24" style="fill:${isFav(n) ? "var(--accent)" : "none"};stroke:currentColor;stroke-width:2"><path d="M12 21s-7.5-4.6-9.5-9.1C1.1 8.6 3.2 5 6.7 5c2 0 3.6 1.1 4.3 2.6h2C13.7 6.1 15.3 5 17.3 5c3.5 0 5.6 3.6 4.2 6.9C19.5 16.4 12 21 12 21z"/></svg>${isFav(n) ? "Favorite" : "Favorite"}</button>
+      <button class="btn quiet" id="s-plan" ${z ? "" : "disabled"}>${plan.includes(n) ? "✓ In your plan" : "Add to plan"}</button>
+      <a class="btn quiet" href="${metLink(n)}" target="_blank" rel="noopener">Met record</a>
+    </div>
+    ${seenBy(n)}
+    <div class="sec"><label class="label" for="s-note">Your notes</label>
+      <textarea class="note-in" id="s-note" rows="3" placeholder="What struck you, what to tell a friend…">${esc(noteOf(n))}</textarea></div>
     <p class="small">Paintings move between rooms. Check the Met record before a visit to confirm it's on view.</p>`;
   $("#s-count").textContent = sheetList.length > 1 ? `${sheetIdx+1} of ${sheetList.length}` : "";
   $("#s-prev").disabled = sheetIdx <= 0; $("#s-next").disabled = sheetIdx >= sheetList.length - 1;
   $("#s-prev").hidden = $("#s-next").hidden = sheetList.length < 2;
   $("#sheet").scrollTop = 0;
   const zb = $("#zoom"); if(zb) zb.addEventListener("click", () => { $("#lb-img").src = `img/${n}.jpg`; $("#lb-img").alt = w[0]; $("#lightbox").hidden = false; });
-  $("#s-seen").addEventListener("click", () => { seen.has(n) ? seen.delete(n) : seen.add(n); saveSeen(); showWork(n); refreshLists(); });
+  $("#s-seen").addEventListener("click", () => { setItem("seen", n, !seen.has(n)); showWork(n); refreshLists(); });
+  $("#s-fav").addEventListener("click", () => { setItem("fav", n, !isFav(n)); showWork(n); refreshLists(); });
+  $("#s-plan").addEventListener("click", () => { plan.includes(n) ? plan = plan.filter(x => x !== n) : plan.push(n); savePlan(); showWork(n); refreshLists();
+    toast(plan.includes(n) ? `Added to your plan (${plan.length})` : "Removed from your plan"); });
+  let nt = null;
+  $("#s-note").addEventListener("input", e => { clearTimeout(nt); const v = e.target.value; nt = setTimeout(() => setItem("notes", n, v), 600); });
+  $("#s-note").addEventListener("blur", e => { clearTimeout(nt); if(e.target.value !== noteOf(n)) setItem("notes", n, e.target.value); });
+  const sb = $("#s-say"); if(sb) sb.addEventListener("click", () => speakWork(n));
   const mb = $("#s-map"); if(mb) mb.addEventListener("click", () => { pinWork = n; mapSel = z.id; mapFloor = z.f; closeSheet(); setView("map"); });
 }
 function closeSheet(fromPop){
+  stopSpeak();
   if($("#sheet").hidden) return;
   $("#sheet").hidden = true; document.body.style.overflow = "";
   if(!fromPop && !inFrame){ try { if(history.state && history.state.sheet) history.back(); } catch(e) {} }
 }
-function refreshLists(){ if(view === "works") renderWorks(); if(view === "map") renderMap(); progress(); }
+function refreshLists(){ if(view === "works") renderWorks(); if(view === "map") renderMap(); if(view === "plan") renderPlan(); progress(); }
 $("#s-close").addEventListener("click", () => closeSheet());
-$("#s-prev").addEventListener("click", () => { if(sheetIdx > 0) showWork(sheetList[sheetIdx-1]); });
-$("#s-next").addEventListener("click", () => { if(sheetIdx < sheetList.length-1) showWork(sheetList[sheetIdx+1]); });
+$("#s-prev").addEventListener("click", () => { if(sheetIdx > 0){ stopSpeak(); showWork(sheetList[sheetIdx-1]); } });
+$("#s-next").addEventListener("click", () => { if(sheetIdx < sheetList.length-1){ stopSpeak(); showWork(sheetList[sheetIdx+1]); } });
 window.addEventListener("popstate", () => { if(!$("#lightbox").hidden){ $("#lightbox").hidden = true; } closeSheet(true); });
 $("#lightbox").addEventListener("click", () => { $("#lightbox").hidden = true; });
 document.addEventListener("keydown", e => {
@@ -1028,10 +1223,25 @@ function renderDrill(marks){
   drawMap($("#map-drill"), drillFloor, {marks: marks || (quiz && quiz.marks), onPick: pick});
 }
 function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
-function startQuiz(){
-  const wq = W.map((w,i) => [w,i+1]).filter(([w]) => w[3]).map(([w,n]) => { const z = byId(w[3]); return {q:`${w[0]}`, sub:`${w[1]}`, a:w[3], why:`Floor ${z.f}, ${z.name.split(",")[0]}.`}; });
-  quiz = {items: shuffle(shuffle(QS.slice()).slice(0,4).concat(shuffle(wq).slice(0,6))), i:-1, score:0, miss:0, marks:{}};
-  $("#qstart").textContent = "Restart"; nextQ();
+function drillItem(key){
+  if(key[0] === "q"){ const it = QS[+key.slice(1)]; return it ? Object.assign({key}, it) : null; }
+  const n = +key.slice(1), w = W[n-1]; if(!w || !w[3]) return null; const z = byId(w[3]);
+  return {key, q:w[0], sub:w[1], a:w[3], why:`Floor ${z.f}, ${z.name.split(",")[0]}.`};
+}
+const drillKeysQ = () => QS.map((q,i) => "q" + i), drillKeysW = () => W.map((w,i) => i+1).filter(n => W[n-1][3]).map(n => "w" + n);
+function startQuiz(practice){
+  const keys = practice === true ? shuffle(missList("met-miss-drill")).slice(0,10)
+    : drawFromDeck("met-deck-drill-q", drillKeysQ(), 4).concat(drawFromDeck("met-deck-drill-w", drillKeysW(), 6));
+  const items = shuffle(keys.map(drillItem).filter(Boolean));
+  if(!items.length) return;
+  quiz = {items, i:-1, score:0, miss:0, marks:{}, practice: practice === true};
+  $("#qstart").textContent = "Restart"; $("#qmissrow").hidden = true; nextQ();
+}
+function drillInfo(){
+  const m = missList("met-miss-drill").length;
+  $("#qmissrow").hidden = !m || !!quiz; $("#qmiss").textContent = `Practice my misses (${m})`;
+  const lq = deckLeft("met-deck-drill-q", drillKeysQ()), lw = deckLeft("met-deck-drill-w", drillKeysW());
+  $("#qinfo").textContent = `${lq + lw} of ${drillKeysQ().length + drillKeysW().length} questions left before any repeat. Quiz progress stays on this phone.`;
 }
 function nextQ(){
   quiz.i++; quiz.done = false; quiz.marks = {}; $("#qfb").textContent = ""; $("#qfb").className = "fb";
@@ -1039,10 +1249,10 @@ function nextQ(){
     $("#qlabel").textContent = "Done";
     $("#q").textContent = `${quiz.score} of ${quiz.items.length} found first try, ${quiz.miss} misses.`;
     $("#qfb").textContent = "Run it again until you get zero misses.";
-    $("#qskip").disabled = true; $("#qstart").textContent = "Go again"; quiz = null; renderDrill({}); return;
+    $("#qskip").disabled = true; $("#qstart").textContent = "Go again"; quiz = null; renderDrill({}); drillInfo(); return;
   }
   const it = quiz.items[quiz.i];
-  $("#qlabel").textContent = `Question ${quiz.i+1} of ${quiz.items.length} · ${quiz.score} right`;
+  $("#qlabel").textContent = `${quiz.practice ? "Practice · " : ""}Question ${quiz.i+1} of ${quiz.items.length} · ${quiz.score} right`;
   $("#q").textContent = "Where is it? " + it.q + (it.sub ? ` (${it.sub})` : "");
   $("#qskip").disabled = false;
   renderDrill();
@@ -1052,6 +1262,7 @@ function pick(id){
   const it = quiz.items[quiz.i];
   if(id === it.a){
     quiz.marks[id] = "right"; if(!quiz.marks._missed) quiz.score++; quiz.done = true;
+    markMiss("met-miss-drill", it.key, !!quiz.marks._missed);
     $("#qfb").className = "fb ok"; $("#qfb").textContent = "Right. " + it.why;
     renderDrill(); setTimeout(nextQ, 1600);
   } else {
@@ -1061,10 +1272,12 @@ function pick(id){
   }
 }
 $("#dfloor").addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; drillFloor = +b.dataset.f; renderDrill(); });
-$("#qstart").addEventListener("click", startQuiz);
+$("#qstart").addEventListener("click", () => startQuiz(false));
+$("#qmiss").addEventListener("click", () => startQuiz(true));
 $("#qskip").addEventListener("click", () => {
   if(!quiz || quiz.done) return;
   const it = quiz.items[quiz.i]; quiz.miss++; quiz.done = true; quiz.marks._missed = true; quiz.marks[it.a] = "right";
+  markMiss("met-miss-drill", it.key, true);
   drillFloor = byId(it.a).f; $("#qfb").className = "fb no"; $("#qfb").textContent = "Here: " + it.why;
   renderDrill(); setTimeout(nextQ, 2200);
 });
@@ -1073,7 +1286,7 @@ $("#qskip").addEventListener("click", () => {
 $("#ranges").innerHTML = RANGES.map(r => `<tr><td>${r[0]}–${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join("");
 function locate(){
   const v = parseInt($("#gal").value, 10), out = $("#gal-out"), near = $("#near");
-  near.innerHTML = ""; near.hidden = true;
+  near.innerHTML = ""; near.hidden = true; $("#near-wc").hidden = true;
   if(isNaN(v)){ out.innerHTML = `<p class="meta">Type the three-digit number on the doorway.</p>`; return; }
   let r = RANGES.find(r => v >= r[0] && v <= r[1]);
   if(!r && v >= 340 && v <= 360) r = [340,360,"Arts of Africa, Oceania and the Americas","Floor 1, south","rock"];
@@ -1086,24 +1299,407 @@ function locate(){
   const items = W.map((w,i) => i+1).filter(n => W[n-1][3] === z.id)
     .sort((a,b) => (GAL[a] ? Math.abs(+GAL[a]-v) : 999) - (GAL[b] ? Math.abs(+GAL[b]-v) : 999)).slice(0,8);
   if(items.length){ near.hidden = false; near.innerHTML = items.map(n => row(n)).join(""); }
+  nearestWC(z);
+}
+function nearestWC(z){
+  const cx = z.x + z.w/2, cy = z.y + z.h/2;
+  const c = BATH.filter(b => b.f === z.f && b.x !== null && b.lvl !== "1M")
+    .map(b => [b, Math.hypot(b.x - cx, b.y - cy)]).sort((a,b) => a[1] - b[1]);
+  if(!c.length) return;
+  const b = c[0][0];
+  $("#near-wc").hidden = false;
+  $("#near-wc").innerHTML = `<div class="bh"><span class="wcdot">WC</span><div><span class="label">Nearest restroom</span><h2>${b.name}</h2></div></div>
+    <p>${b.how}</p><div class="actions" style="grid-template-columns:1fr"><button class="btn quiet" id="wc-map">Show restrooms on the map</button></div>`;
+  $("#wc-map").addEventListener("click", () => { showWC = true; showFood = false; pinWork = null; mapFloor = z.f; setView("map"); });
 }
 $("#gal-go").addEventListener("click", locate);
 $("#gal").addEventListener("keydown", e => { if(e.key === "Enter"){ locate(); e.target.blur(); } });
 $("#near").addEventListener("click", e => { const b = e.target.closest("[data-w]"); if(b) openSheet(+b.dataset.w, [...$("#near").querySelectorAll("[data-w]")].map(x => +x.dataset.w)); });
 
+/* ---------- toast ---------- */
+let toastT = null;
+function toast(msg, label, fn){
+  $("#toast-msg").textContent = msg;
+  const b = $("#toast-btn"); b.hidden = !label; b.textContent = label || ""; b.onclick = () => { $("#toast").hidden = true; if(fn) fn(); };
+  $("#toast").hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { $("#toast").hidden = true; }, label ? 6000 : 2600);
+}
+
+/* ---------- read aloud ---------- */
+const canSpeak = "speechSynthesis" in window && typeof SpeechSynthesisUtterance !== "undefined";
+let speakingN = null;
+function stopSpeak(){ if(canSpeak && speakingN !== null){ try { speechSynthesis.cancel(); } catch(e) {} speakingN = null; const b = $("#s-say"); if(b) updateSayBtn(b, false); } }
+function updateSayBtn(b, on){
+  b.setAttribute("aria-pressed", String(on));
+  b.innerHTML = `<svg viewBox="0 0 24 24">${on ? '<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>' : '<path d="M7 4.5v15l12-7.5z"/>'}</svg>${on ? "Stop" : "Listen to this lesson"}`;
+}
+function speakWork(n){
+  if(!canSpeak) return;
+  if(speakingN === n){ stopSpeak(); return; }
+  stopSpeak();
+  const w = W[n-1];
+  const date = w[2].replace(/\bc\.\s*/g, "circa ").replace(/–/g, " to ").replace(/BCE/g, "B C E").replace(/\bc\b\./g, "century");
+  const text = [w[0] + ".", w[1] + ", " + date + ".", w[5], "Why it made the list. " + WHY[n-1], "Look for. " + L[n-1][0], "The story. " + L[n-1][1]]
+    .join(" ").replace(/["“”]/g, "");
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US"; u.rate = 0.97;
+  u.onend = u.onerror = () => { if(speakingN === n){ speakingN = null; const b = $("#s-say"); if(b) updateSayBtn(b, false); } };
+  try { speechSynthesis.cancel(); speechSynthesis.speak(u); speakingN = n; const b = $("#s-say"); if(b) updateSayBtn(b, true); } catch(e) {}
+}
+
+/* ---------- who saw it ---------- */
+function seenBy(n){
+  const e = store.seen[n];
+  if(!e || !e.v || !e.by) return "";
+  const me = (cfg.name || "").trim().toLowerCase();
+  if(me && e.by.trim().toLowerCase() === me) return "";
+  return `<p class="by-line">Seen by ${esc(e.by)}</p>`;
+}
+
+/* ---------- visit planner ---------- */
+const ZORDER = {1:["great","egypt","dendur","american","arms","medieval","lehman","esda","rock","greek"],
+                2:["balcony","asian","music","american2","europe","c19","neareast","islamic"]};
+const zrank = id => { for(const f of [1,2]){ const i = ZORDER[f].indexOf(id); if(i >= 0) return f*100 + i; } return 999; };
+const onView = n => !!W[n-1][3];
+function orderedPlan(){
+  return plan.filter(onView).sort((a,b) => zrank(W[a-1][3]) - zrank(W[b-1][3]) || (+GAL[a] || 9999) - (+GAL[b] || 9999) || a - b);
+}
+function planMinutes(ord){
+  let m = ord.length * 4, prev = null;
+  ord.forEach(n => { const z = W[n-1][3]; if(z !== prev){ m += prev ? (byId(z).f !== byId(prev).f ? 6 : 3) : 2; prev = z; } });
+  return Math.max(5, Math.round(m / 5) * 5);
+}
+const fmtMin = m => m < 60 ? `${m} min` : `${Math.floor(m/60)} h${m % 60 ? " " + (m % 60) + " min" : ""}`;
+const TOP10 = Object.keys(VIEWS).map(Number).filter(onView).sort((a,b) => VIEWS[b][0] - VIEWS[a][0]).slice(0, 10);
+const PRESETS = [
+  {name:"Must-sees", desc:"All 20 must-see works, in walking order.", works: MUST},
+  {name:"The 10 most famous", desc:"The ten most-viewed works on Wikipedia that you can see now.", works: TOP10},
+  {name:"Women artists", desc:"Artemisia Gentileschi, Adélaïde Labille-Guiard, Rosa Bonheur, Mary Cassatt and Tiffany designer Agnes Northrop. O'Keeffe joins when the modern wing reopens.", works:[57,69,72,91,96]},
+  {name:"Animals in art", desc:"A blue hippo, a five-legged guardian, armored horses, hungry cats and a sailor circled by sharks.", works:[5,8,10,21,30,51,68,72,94]},
+  {name:"New York stories", desc:"A temple given to the city, a garden built by craftsmen from Suzhou, rooms rebuilt from across the world, and a goddess that once topped Madison Square Garden.", works:[19,26,31,46,47,60,88,89,93,95]},
+  {name:"A date at the Met", desc:"Couples, music, gardens and the most romantic rooms in the building.", works:[35,54,76,75,85,63,92,26,19]},
+  {name:"Kings, queens and emperors", desc:"Five thousand years of rulers and the art they used to show their power.", works:[3,6,7,9,34,39,21,30,49]}
+];
+let planFloor = 1;
+function routeFor(ord, f){
+  const stops = [], pts = [], seenZ = new Set(), hi = new Set();
+  pts.push(f === 1 ? [210, 318] : [210, 230]);
+  ord.forEach((n, i) => {
+    const z = byId(W[n-1][3]); if(z.f !== f || seenZ.has(z.id)) return;
+    seenZ.add(z.id); hi.add(z.id);
+    pts.push([z.x + z.w/2, z.y + z.h/2]);
+    stops.push({x: z.x + 13, y: z.y + 13, label: i + 1});
+  });
+  if(f === 1 && ord.some(n => byId(W[n-1][3]).f === 2)) pts.push([210, 300]);
+  return {pts: stops.length ? pts : [], stops, hi};
+}
+function renderPlan(){
+  const ord = orderedPlan(), off = plan.filter(n => !onView(n));
+  const sum = $("#plan-sum");
+  if(!plan.length){
+    sum.innerHTML = `<span class="label">Your plan</span><h2>Nothing planned yet</h2>
+      <p>Open any work and tap <b style="font-family:var(--f-sign)">Add to plan</b>, or load a ready-made plan below. The app puts your picks in walking order and draws the route.</p>`;
+    $("#plan-mapbox").hidden = true; $("#plan-list").innerHTML = "";
+  } else {
+    const done = ord.filter(n => seen.has(n)).length;
+    sum.innerHTML = `<span class="label">Your plan</span><h2>${ord.length} ${ord.length === 1 ? "work" : "works"} · about ${fmtMin(planMinutes(ord))}</h2>
+      <p class="meta">${done} of ${ord.length} seen. Times allow about four minutes a work plus walking.</p>
+      <div class="actions"><button class="btn quiet" id="plan-clear">Clear plan</button><button class="btn quiet" id="plan-next">${done < ord.length ? "Next stop" : "All done"}</button></div>`;
+    const floors = [...new Set(ord.map(n => byId(W[n-1][3]).f))];
+    if(!floors.includes(planFloor)) planFloor = floors[0] || 1;
+    $("#plan-mapbox").hidden = !ord.length;
+    segSet($("#pfloor"), planFloor);
+    const r = routeFor(ord, planFloor);
+    drawMap($("#map-plan"), planFloor, {route: r, hi: r.hi, onPick: id => { mapSel = id; mapFloor = byId(id).f; pinWork = null; showWC = showFood = false; setView("map"); }});
+    let html = "";
+    [1, 2].forEach(f => {
+      const items = ord.filter(n => byId(W[n-1][3]).f === f);
+      if(!items.length) return;
+      html += `<div class="floor-h"><h3>Floor ${f}</h3><span class="meta">${items.length} ${items.length === 1 ? "stop" : "stops"}</span></div>
+        <div class="rows">${items.map(n => row(n, ord.indexOf(n) + 1)).join("")}</div>`;
+    });
+    if(off.length) html += `<div class="floor-h"><h3>Not on view now</h3></div><div class="rows">${off.map(n => row(n)).join("")}</div>`;
+    $("#plan-list").innerHTML = html;
+    $("#plan-clear").addEventListener("click", () => { const prev = plan.slice(); plan = []; savePlan(); renderPlan(); toast("Plan cleared", "Undo", () => { plan = prev; savePlan(); renderPlan(); }); });
+    $("#plan-next").addEventListener("click", () => { const nx = ord.find(n => !seen.has(n)); if(nx) openSheet(nx, ord); });
+  }
+  $("#presets").innerHTML = PRESETS.map((p, i) => { const ws = p.works.filter(onView);
+    return `<div class="preset"><h4>${p.name}</h4><p>${p.desc}</p><span class="meta">${ws.length} works · about ${fmtMin(planMinutes(ws.slice().sort((a,b) => zrank(W[a-1][3]) - zrank(W[b-1][3]))))}</span>
+      <button class="btn quiet" data-p="${i}">Load</button></div>`; }).join("");
+}
+$("#pfloor").addEventListener("click", e => { const b = e.target.closest("button"); if(!b) return; planFloor = +b.dataset.f; renderPlan(); });
+$("#plan-list").addEventListener("click", e => { const b = e.target.closest("[data-w]"); if(b){ const all = orderedPlan().concat(plan.filter(n => !onView(n))); openSheet(+b.dataset.w, all); } });
+$("#presets").addEventListener("click", e => {
+  const b = e.target.closest("[data-p]"); if(!b) return;
+  const p = PRESETS[+b.dataset.p], prev = plan.slice();
+  plan = p.works.slice(); savePlan(); planFloor = 1; renderPlan(); window.scrollTo({top:0, behavior: reduce ? "auto" : "smooth"});
+  toast(`Loaded “${p.name}”`, prev.length ? "Undo" : "", () => { plan = prev; savePlan(); renderPlan(); });
+});
+
+/* ---------- quiz memory (this phone only, never synced) ---------- */
+const qload = k => { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch(e) { return null; } };
+const qsave = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} };
+// Deal from a shuffled deck so nothing repeats until every item has come up once.
+function drawFromDeck(key, all, count){
+  let deck = (qload(key) || []).filter(x => all.includes(x));
+  const out = [];
+  while(out.length < count){
+    if(!deck.length){ deck = shuffle(all.filter(x => !out.includes(x))); if(!deck.length) break; }
+    out.push(deck.shift());
+  }
+  qsave(key, deck); return out;
+}
+const deckLeft = (key, all) => { const d = qload(key); return d === null ? all.length : d.filter(x => all.includes(x)).length || all.length; };
+const missList = key => qload(key) || [];
+function markMiss(key, item, missed){
+  let m = missList(key).filter(x => x !== item);
+  if(missed) m.push(item);
+  qsave(key, m);
+}
+
+/* ---------- Learn ---------- */
+let learnMode = "layout";
+function renderLearn(){
+  $("#lmode").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.m === learnMode)));
+  $("#l-layout").hidden = learnMode !== "layout"; $("#l-pics").hidden = learnMode !== "pics"; $("#l-time").hidden = learnMode !== "time";
+  if(learnMode === "layout"){ renderDrill(); drillInfo(); }
+  if(learnMode === "pics") renderPics();
+  if(learnMode === "time") renderTimeline();
+}
+$("#lmode").addEventListener("click", e => { const b = e.target.closest("[data-m]"); if(!b) return; learnMode = b.dataset.m; renderLearn(); });
+
+// picture quiz
+const PMODES = [["artist","Who made it?"],["work","Name the work"],["period","Which period?"]];
+let pmode = "artist", pq = null;
+const artistOf = n => W[n-1][1].split(/,| and /)[0].replace(/^Attributed to /, "").trim();
+const eraName = n => ERAS.find(e => e[0] === W[n-1][4])[1];
+const answerOf = n => pmode === "artist" ? artistOf(n) : pmode === "work" ? W[n-1][0] : eraName(n);
+const picPool = () => W.map((w,i) => i+1).filter(n => IMG.has(n));
+const picDeckKey = () => "met-deck-pics-" + pmode, picMissKey = () => "met-miss-pics-" + pmode;
+function startPics(practice){
+  const qs = practice ? shuffle(missList(picMissKey()).filter(n => IMG.has(n))).slice(0, 10) : drawFromDeck(picDeckKey(), picPool(), 10);
+  if(!qs.length){ pq = null; renderPics(); return; }
+  pq = {qs, i: -1, score: 0, answered: false, practice: !!practice};
+  nextPic();
+}
+function nextPic(){
+  pq.i++; pq.answered = false;
+  if(pq.i >= pq.qs.length){ renderPics(); return; }
+  const n = pq.qs[pq.i], right = answerOf(n);
+  let pool;
+  if(pmode === "period") pool = ERAS.map(e => e[1]);
+  else {
+    const same = W.map((w,i) => i+1).filter(m => m !== n && W[m-1][4] === W[n-1][4]).map(answerOf);
+    const rest = W.map((w,i) => i+1).filter(m => m !== n).map(answerOf);
+    pool = shuffle([...new Set(same)]).concat(shuffle([...new Set(rest)]));
+  }
+  const wrong = [...new Set(pool.filter(x => x !== right))].slice(0, 3);
+  pq.opts = shuffle([right, ...wrong]); pq.right = right;
+  renderPics();
+}
+function renderPics(){
+  $("#pmode").innerHTML = PMODES.map(([k,l]) => `<button class="chip" data-pm="${k}" aria-pressed="${pmode === k}">${l}</button>`).join("");
+  const c = $("#pcard");
+  const misses = missList(picMissKey()).length, left = deckLeft(picDeckKey(), picPool()), total = picPool().length;
+  const progressLine = `<p class="small">${left === total ? `All ${total} pictures are in the deck.` : `${left} of ${total} pictures left before any repeat.`}${misses ? ` ${misses} to practice.` : ""} Quiz progress stays on this phone.</p>`;
+  const buttons = (label) => `<div class="actions" style="grid-template-columns:${misses ? "1fr 1fr" : "1fr"}"><button class="btn" id="p-start">${label}</button>${misses ? `<button class="btn quiet" id="p-miss">Practice my misses (${misses})</button>` : ""}</div>`;
+  const wire = () => { $("#p-start").addEventListener("click", () => startPics(false)); const m = $("#p-miss"); if(m) m.addEventListener("click", () => startPics(true)); };
+  if(!pq){
+    c.innerHTML = `<span class="label">Picture quiz</span><p class="q">Ten pictures a round. ${PMODES.find(p => p[0] === pmode)[1]}</p>
+      ${progressLine}${buttons("Start quiz")}`;
+    wire(); return;
+  }
+  if(pq.i >= pq.qs.length){
+    const s = pq.score;
+    c.innerHTML = `<span class="label">${pq.practice ? "Practice done" : "Done"}</span><p class="q">${s} of ${pq.qs.length} right.</p>
+      <p>${pq.practice ? (misses ? "Right answers come off the practice list. Keep going until it's empty." : "Practice list cleared. Nice work.") : s >= 9 ? "Excellent. Try another quiz type." : s >= 6 ? "Good going. Another round will lock it in." : "Open a few lessons in Works, then try again."}</p>
+      ${progressLine}${buttons("Next round")}`;
+    wire(); return;
+  }
+  const n = pq.qs[pq.i], w = W[n-1];
+  const prompt = pmode === "artist" ? "Who made this, or which culture is it from?" : pmode === "work" ? "What is this?" : "Which period of the list is this from?";
+  c.innerHTML = `<span class="label">${pq.practice ? "Practice · " : ""}Question ${pq.i+1} of ${pq.qs.length} · ${pq.score} right</span>
+    <figure class="qimg"><img src="img/${n}.jpg" alt="Mystery work"></figure>
+    <p class="q">${prompt}</p>
+    <div class="opts">${pq.opts.map((o,i) => `<button class="opt" data-o="${i}">${esc(o)}</button>`).join("")}</div>
+    <p class="fb" id="pfb"></p>
+    <div class="actions" id="p-after" hidden><button class="btn quiet" id="p-lesson">Open lesson</button><button class="btn" id="p-next">${pq.i + 1 < pq.qs.length ? "Next" : "See score"}</button></div>`;
+  c.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => {
+    if(pq.answered) return; pq.answered = true;
+    const pickTxt = pq.opts[+b.dataset.o], ok = pickTxt === pq.right;
+    if(ok) pq.score++;
+    markMiss(picMissKey(), n, !ok);
+    c.querySelectorAll(".opt").forEach(x => { x.disabled = true; if(pq.opts[+x.dataset.o] === pq.right) x.classList.add("right"); });
+    if(!ok) b.classList.add("wrong");
+    const fb = $("#pfb"); fb.className = "fb " + (ok ? "ok" : "no");
+    fb.textContent = (ok ? "Right. " : "Not quite. ") + `${w[0]}, ${w[1]}, ${w[2]}.`;
+    c.querySelector("img").alt = `${w[0]}, ${w[1]}`;
+    $("#p-after").hidden = false;
+    $("#p-next").addEventListener("click", nextPic);
+    $("#p-lesson").addEventListener("click", () => openSheet(n));
+  }));
+}
+$("#pmode").addEventListener("click", e => { const b = e.target.closest("[data-pm]"); if(!b) return; pmode = b.dataset.pm; pq = null; renderPics(); });
+
+// timeline
+const fmtYear = y => y < 0 ? `${-y} BCE` : y < 1000 ? `${y} CE` : String(y);
+function fmtGap(g){ const r = g >= 1000 ? Math.round(g/100)*100 : Math.round(g/50)*50; return `${r.toLocaleString("en-US")} years`; }
+let tlDone = false;
+function renderTimeline(){
+  if(tlDone) return;
+  $("#tl-legend").innerHTML = ERAS.map(e => `<span class="e-${e[0]}"><i></i>${e[1]}</span>`).join("");
+  const ord = W.map((w,i) => i+1).sort((a,b) => YEAR[a-1] - YEAR[b-1] || a - b);
+  let html = "", prev = null;
+  ord.forEach(n => {
+    const y = YEAR[n-1], w = W[n-1];
+    if(prev !== null && y - prev >= 150) html += `<li class="gap" aria-hidden="true"><span>${fmtGap(y - prev)} later</span></li>`;
+    prev = y;
+    html += `<li class="tl-i e-${w[4]}"><span class="yr">${fmtYear(y)}</span><span class="dot"></span>
+      <button class="tl-b" data-w="${n}">${thumb(n)}<span class="t"><b>${w[0]}</b><span class="s">${w[1]} · ${w[2]}</span></span></button></li>`;
+  });
+  $("#tl").innerHTML = html; tlDone = true;
+}
+$("#tl").addEventListener("click", e => { const b = e.target.closest("[data-w]"); if(!b) return;
+  const ord = W.map((w,i) => i+1).sort((a,b) => YEAR[a-1] - YEAR[b-1] || a - b); openSheet(+b.dataset.w, ord); });
+
+/* ---------- shared list (optional sync through a Firebase Realtime Database) ---------- */
+let syncState = "off", syncErr = "", lastSync = 0, syncT = null, syncing = false;
+const syncOn = () => !!(cfg.url && cfg.code);
+function queueSync(){ if(!syncOn()) return; clearTimeout(syncT); syncT = setTimeout(doSync, 1200); }
+const KINDS = ["seen","fav","notes"];
+function toRemote(st){ const o = {}; KINDS.forEach(k => { o[k] = {}; Object.keys(st[k] || {}).forEach(n => { o[k]["w" + n] = st[k][n]; }); }); return o; }
+function fromRemote(r){ const o = {seen:{}, fav:{}, notes:{}}; if(!r) return o;
+  KINDS.forEach(k => { const src = r[k] || {}; Object.keys(src).forEach(key => { const n = +key.replace(/^w/, ""); if(n >= 1 && n <= 100 && src[key]) o[k][n] = src[key]; }); }); return o; }
+function mergeStores(a, b){ const o = {seen:{}, fav:{}, notes:{}};
+  KINDS.forEach(k => { const A = a[k] || {}, B = b[k] || {};
+    new Set([...Object.keys(A), ...Object.keys(B)]).forEach(n => { const x = A[n], y = B[n]; o[k][n] = !x ? y : !y ? x : ((y.t || 0) > (x.t || 0) ? y : x); }); });
+  return o; }
+const sig = st => KINDS.map(k => Object.keys(st[k] || {}).map(Number).sort((a,b) => a - b).map(n => `${n}:${st[k][n].t}:${JSON.stringify(st[k][n].v)}`).join(",")).join("|");
+const dbBase = () => cfg.url.trim().replace(/\/+$/, "").replace(/\.json$/, "");
+async function doSync(){
+  if(!syncOn()){ syncState = "off"; updSync(); return; }
+  if(syncing) return;
+  if(navigator.onLine === false){ syncState = "offline"; updSync(); return; }
+  syncing = true; syncState = "syncing"; updSync();
+  const url = `${dbBase()}/households/${encodeURIComponent(cfg.code)}.json`;
+  try {
+    const r = await fetch(url, {cache: "no-store"});
+    if(!r.ok) throw new Error(r.status === 401 || r.status === 403 ? "The database refused access. Check its rules (step 4 of the setup)." : `The database answered ${r.status}.`);
+    const remote = fromRemote(await r.json());
+    const merged = mergeStores(store, remote);
+    if(sig(merged) !== sig(remote)){
+      const w = await fetch(url, {method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(toRemote(merged))});
+      if(!w.ok) throw new Error(w.status === 401 || w.status === 403 ? "The database refused to save. Check its rules (step 4 of the setup)." : `Saving failed (${w.status}).`);
+    }
+    const changed = sig(merged) !== sig(store);
+    store = merged; saveStore(); rebuild();
+    if(changed) refreshAll();
+    syncState = "ok"; lastSync = Date.now(); syncErr = "";
+  } catch(e){
+    syncState = "error";
+    syncErr = inFrame ? "Sharing works in the version on your website, not inside this preview." : (e && e.message && !/fetch/i.test(e.message) ? e.message : "Couldn't reach the database. Check the address and your connection.");
+  }
+  syncing = false; updSync();
+}
+function refreshAll(){
+  refreshLists();
+  if(!$("#sheet").hidden && document.activeElement !== $("#s-note") && sheetList[sheetIdx]) showWork(sheetList[sheetIdx]);
+}
+setInterval(() => { if(!document.hidden) doSync(); }, 45000);
+document.addEventListener("visibilitychange", () => { if(!document.hidden) doSync(); });
+window.addEventListener("online", doSync);
+
+function statusText(){
+  if(syncState === "off") return ["", "Not set up. Your list stays on this phone."];
+  if(syncState === "syncing") return ["syncing", "Syncing…"];
+  if(syncState === "offline") return ["", "Offline. Changes will sync when you're back online."];
+  if(syncState === "error") return ["error", syncErr];
+  const mins = Math.round((Date.now() - lastSync) / 60000);
+  return ["ok", `Synced ${mins < 1 ? "just now" : mins + " min ago"}`];
+}
+function updSync(){ const el = $("#set-status"); if(!el) return; const [c, t] = statusText(); el.className = "status " + c; el.innerHTML = `<i></i>${esc(t)}`; }
+function newCode(){ const a = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let s = ""; const r = new Uint32Array(12); crypto.getRandomValues(r); r.forEach((v,i) => { s += a[v % a.length]; if(i === 3 || i === 7) s += "-"; }); return s; }
+const setupCode = () => `${dbBase()}#${cfg.code}`;
+async function copyText(txt, el){
+  try { await navigator.clipboard.writeText(txt); toast("Copied"); }
+  catch(e){ if(el){ const rg = document.createRange(); rg.selectNodeContents(el); const sl = getSelection(); sl.removeAllRanges(); sl.addRange(rg); } toast("Select the text and copy it"); }
+}
+function openSettings(){ renderSettings(); $("#settings").hidden = false; document.body.style.overflow = "hidden"; $("#set-close").focus({preventScroll:true}); }
+function closeSettings(){ $("#settings").hidden = true; if($("#sheet").hidden) document.body.style.overflow = ""; }
+function renderSettings(){
+  const favs = Object.keys(store.fav).filter(k => store.fav[k].v).length, notes = Object.keys(store.notes).filter(k => store.notes[k].v).length;
+  $("#set-body").innerHTML = `
+    <div class="title"><span class="label">Met Compass</span><h2 id="set-title">Settings and sharing</h2></div>
+    <div class="card"><label class="label" for="set-name">Your name</label>
+      <input class="field" id="set-name" value="${esc(cfg.name)}" placeholder="Your first name" autocomplete="given-name">
+      <p class="small">Shown on works you mark as seen, so the other person knows who saw what.</p></div>
+    <div class="card"><span class="label">Shared list</span>
+      <span class="status" id="set-status"></span>
+      <p>Share seen works, favorites and notes between your phones. Your plan stays on each phone.</p>
+      <label class="label" for="set-url">Database address</label>
+      <input class="field" id="set-url" value="${esc(cfg.url)}" placeholder="https://your-project-default-rtdb.firebaseio.com" inputmode="url" autocapitalize="off" spellcheck="false">
+      <label class="label" for="set-code">Household code</label>
+      <div class="fieldrow"><input class="field" id="set-code" value="${esc(cfg.code)}" placeholder="Tap New" autocapitalize="characters" spellcheck="false"><button class="btn quiet" id="set-new">New</button></div>
+      <div class="actions"><button class="btn" id="set-save">Save and sync</button><button class="btn quiet" id="set-sync">Sync now</button></div>
+      ${syncOn() ? `<span class="label" style="margin-top:6px">Set up the other phone</span>
+        <p class="small" style="margin:0">On the other phone, open Settings and paste this into "Paste a setup code".</p>
+        <div class="code" id="set-codeout">${esc(setupCode())}</div>
+        <div class="actions" style="grid-template-columns:1fr"><button class="btn quiet" id="set-copy">Copy setup code</button></div>` : ""}
+      <label class="label" for="set-paste" style="margin-top:6px">Paste a setup code</label>
+      <div class="fieldrow"><input class="field" id="set-paste" placeholder="https://…#XXXX-XXXX-XXXX" autocapitalize="off" spellcheck="false"><button class="btn quiet" id="set-apply">Use</button></div>
+    </div>
+    <details class="more"><summary>How to set up sharing (once, about 10 minutes)</summary>
+      <ol class="steps">
+        <li>On a computer, go to console.firebase.google.com and sign in with a Google account. Click <b>Create a project</b>, name it (for example met-compass) and finish the steps. Analytics can stay off.</li>
+        <li>In the left menu open <b>Build</b>, then <b>Realtime Database</b>, then <b>Create database</b>. Pick the United States location and start in <b>locked mode</b>.</li>
+        <li>Copy the database address shown at the top of the Data tab. It looks like https://met-compass-default-rtdb.firebaseio.com.</li>
+        <li>Open the <b>Rules</b> tab, replace everything with the rules below, and click <b>Publish</b>.</li>
+      </ol>
+      <div class="code" id="set-rules">{ "rules": { ".read": false, ".write": false, "households": { "$code": { ".read": "$code.length >= 12", ".write": "$code.length >= 12" } } } }</div>
+      <div class="actions" style="grid-template-columns:1fr;margin-top:8px"><button class="btn quiet" id="set-copyrules">Copy the rules</button></div>
+      <ol class="steps" start="5">
+        <li>Back here, paste the address, tap <b>New</b> for a household code, then <b>Save and sync</b>.</li>
+        <li>Copy the setup code and send it to the other phone. They paste it under "Paste a setup code".</li>
+      </ol>
+      <p class="small">Anyone with both the address and the code can see and change the list, so share the setup code only with each other. The free plan is far more than this needs.</p>
+    </details>
+    <div class="card"><span class="label">On this phone</span>
+      <p>${seen.size} seen · ${favs} ${favs === 1 ? "favorite" : "favorites"} · ${notes} ${notes === 1 ? "note" : "notes"} · ${plan.length} in your plan</p>
+      <p class="small">Everything is saved on the phone too, so the app works offline.</p></div>`;
+  updSync();
+  $("#set-name").addEventListener("change", e => { cfg.name = e.target.value.trim(); saveCfg(); });
+  $("#set-new").addEventListener("click", () => { $("#set-code").value = newCode(); });
+  $("#set-save").addEventListener("click", () => {
+    cfg.name = $("#set-name").value.trim(); cfg.url = $("#set-url").value.trim(); cfg.code = $("#set-code").value.trim().toUpperCase();
+    if(cfg.url && !/^https:\/\/[^\s]+$/.test(cfg.url)){ toast("The address should start with https://"); return; }
+    if(cfg.code && cfg.code.replace(/-/g, "").length < 10){ toast("Use a longer code. Tap New for one."); return; }
+    saveCfg(); renderSettings(); doSync();
+  });
+  $("#set-sync").addEventListener("click", doSync);
+  $("#set-apply").addEventListener("click", () => {
+    const v = $("#set-paste").value.trim(), i = v.lastIndexOf("#");
+    if(i < 8){ toast("That doesn't look like a setup code"); return; }
+    cfg.url = v.slice(0, i); cfg.code = v.slice(i + 1).toUpperCase(); cfg.name = $("#set-name").value.trim() || cfg.name; saveCfg(); renderSettings(); doSync();
+  });
+  const cp = $("#set-copy"); if(cp) cp.addEventListener("click", () => copyText(setupCode(), $("#set-codeout")));
+  $("#set-copyrules").addEventListener("click", () => copyText($("#set-rules").textContent, $("#set-rules")));
+}
+$("#gear").addEventListener("click", openSettings);
+$("#set-close").addEventListener("click", closeSettings);
+document.addEventListener("keydown", e => { if(e.key === "Escape" && !$("#settings").hidden) closeSettings(); });
+
 /* ---------- tabs ---------- */
-const TITLES = {map:["Map","The Met Fifth Avenue"], works:["100 works","In time order"], drill:["Drill","Learn the layout"], find:["Find","Where am I?"]};
+const TITLES = {map:["Map","The Met Fifth Avenue"], works:["100 works","In time order"], plan:["Plan","Your visit"], learn:["Learn","Layout, pictures, timeline"], find:["Find","Where am I?"]};
 function setView(v){
   view = v;
-  ["map","works","drill","find"].forEach(k => { $("#v-"+k).hidden = k !== v; });
+  ["map","works","plan","learn","find"].forEach(k => { $("#v-"+k).hidden = k !== v; });
   document.querySelectorAll(".tabbar [data-v]").forEach(b => b.setAttribute("aria-selected", String(b.dataset.v === v)));
   $("#vtitle").textContent = TITLES[v][0]; $("#vsub").textContent = TITLES[v][1];
-  if(v === "map") renderMap(); if(v === "works") renderWorks(); if(v === "drill") renderDrill();
+  if(v === "map") renderMap(); if(v === "works"){ renderWorks(); $("#vsub").textContent = sortMode === "famous" ? "By Wikipedia views" : "In time order"; } if(v === "plan") renderPlan(); if(v === "learn") renderLearn();
   window.scrollTo({top:0});
 }
 document.querySelector(".tabbar").addEventListener("click", e => { const b = e.target.closest("[data-v]"); if(b){ closeSheet(); setView(b.dataset.v); } });
 
-renderChips(); setView("map");
+renderChips(); setView("map"); doSync();
 if("serviceWorker" in navigator && !inFrame && location.protocol === "https:"){
   navigator.serviceWorker.register("sw.js").catch(() => {});
 }
